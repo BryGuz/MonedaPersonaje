@@ -6,11 +6,13 @@
 package juego;
 import java.awt.Color;
 import javax.swing.*;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,32 +36,32 @@ public class NewPanel  extends JPanel implements ActionListener, MouseListener{
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         //System.out.println("clicl");
-        /*
+        
         g.setColor(Color.RED);
-        g.fillRect(100, 400, 95, 150);
-        g.drawRect(100, 400, 95, 150);
+        g.fillRect(100, 400+i, 95, 150);
+        g.drawRect(100, 400+i, 95, 150);
         g.setColor(Color.WHITE);
         g.drawRect(110, 410, 75, 130);
         
         
         g.setColor(Color.GREEN);
-        g.fillRect(800, 400, 95, 150);
-        g.drawRect(800, 400, 95, 150);
-        g.fillRect(450, 200, 95, 150);
-        g.drawRect(450, 200, 95, 150);
+        g.fillRect(800, 400+i, 95, 150);
+        g.drawRect(800, 400+i, 95, 150);
+        g.fillRect(450, 200+i, 95, 150);
+        g.drawRect(450, 200+i, 95, 150);
         g.setColor(Color.RED);
-        g.fillRect(500, 250, 95, 150);
-        g.drawRect(500, 250, 95, 150);
+        g.fillRect(500, 250+i, 95, 150);
+        g.drawRect(500, 250+i, 95, 150);
         
         g.setColor(Color.BLUE);
-        g.drawOval(450, 600, 50, 50);
-        g.fillOval(450, 600, 50, 50);
-        g.drawRect(400, 650, 150, 95);
-        g.drawRect(400, 745, 40, 100);
-        g.drawRect(510, 745, 40, 100);
+        g.drawOval(450, 600-i, 50, 50);
+        g.fillOval(450, 600-i, 50, 50);
+        g.drawRect(400, 650-i, 150, 95);
+        g.drawRect(400, 745-i, 40, 100);
+        g.drawRect(510, 745-i, 40, 100);
         
         g.drawString("Puntos: 800", 800, 20);
-        */
+        
         Color puerta = new Color(103,168,255);
         Color techo = new Color(106,194,255);
         
@@ -122,7 +124,12 @@ public class NewPanel  extends JPanel implements ActionListener, MouseListener{
         for (int i = -700; i < 300; i+=50) {*/
             //cuadrado de colision
             g.setColor(Color.WHITE);
-            g.drawRect(700+i, 685+x, 100, 70);
+            //g.drawRect(700+i, 685+x, 100, 70);
+            
+            //rectangulo objeto colision
+            g.setColor(Color.BLACK);
+            g.drawRect(700-i, 500, 100, 70);
+            g.fillRect(700-i, 500, 100, 70);
          
             
             g.setColor(techo);
@@ -150,6 +157,9 @@ public class NewPanel  extends JPanel implements ActionListener, MouseListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        checkCollisions();
+        
+        
         if(cr){
            i+=5;
            x-=2; 
@@ -174,10 +184,24 @@ public class NewPanel  extends JPanel implements ActionListener, MouseListener{
     public Rectangle getBounds(){
         return new Rectangle(700+i, 685+x, 100, 70);
     }
+    public Rectangle getBoundsobjeto(){
+        return new Rectangle(700, 500, 100, 70);
+    }
     
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        Point mo = e.getPoint();
+        if (getBounds().contains(mo)) {
+            timer.stop();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(NewPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            timer.start();
+        }
+        
         System.out.println("Hola");
     }
 
@@ -200,5 +224,16 @@ public class NewPanel  extends JPanel implements ActionListener, MouseListener{
     public void mouseExited(MouseEvent e) {
         
     }
+    
+    public void checkCollisions(){
+        Rectangle carro = this.getBounds();
+        Rectangle objeto = this.getBoundsobjeto();
+        
+        if(carro.intersects(objeto)){
+            
+        }
+    }
+    
+    
     
 }
