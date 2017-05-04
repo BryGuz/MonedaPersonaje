@@ -8,14 +8,15 @@ import java.awt.Color;
 import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  *
  * @author Estudiante
  */
-public class NewPanel  extends JPanel implements ActionListener{
+public class NewPanel  extends JPanel implements ActionListener, MouseListener{
     private Timer timer;
     int i =-700;
     int x =0;
@@ -25,6 +26,7 @@ public class NewPanel  extends JPanel implements ActionListener{
     public NewPanel(){
         timer = new Timer(25, this);
         timer.start();
+        this.addMouseListener(this);
     }
     
     
@@ -119,8 +121,7 @@ public class NewPanel  extends JPanel implements ActionListener{
         //carro movimiento
         for (int i = -700; i < 300; i+=50) {*/
             //cuadrado de colision
-            g.setColor(Color.BLACK);
-            
+            g.setColor(Color.WHITE);
             g.drawRect(700+i, 685+x, 100, 70);
          
             
@@ -168,6 +169,36 @@ public class NewPanel  extends JPanel implements ActionListener{
          
         
         repaint();      
+    }
+    
+    public Rectangle getBounds(){
+        return new Rectangle(700+i, 685+x, 100, 70);
+    }
+    
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("Hola");
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        
     }
     
 }
