@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 /**
  *
  * @author Estudiante
@@ -30,9 +31,14 @@ public class NewPanel2 extends JPanel implements ActionListener, MouseListener{
     int secuencia =0;
     boolean cr = true;
     public NewPanel2(){
+        addKeyListener(new TAdapter());
+        setFocusable(true);        
+        
         timer = new Timer(25, this);
         timer.start();
         this.addMouseListener(this);
+        
+        
     }
     
     @Override
@@ -48,12 +54,6 @@ public class NewPanel2 extends JPanel implements ActionListener, MouseListener{
         
         int t = secuencia*132;
         int t2 = t+132;
-        
-        
-        
-        
-        
-        
         
         g.drawImage(cat, catx+i, caty,(catx+i) + 132,caty +80,t,0,t2,80, null);
         g.drawRect(catx+i, caty, 132, 80);
@@ -89,7 +89,7 @@ public class NewPanel2 extends JPanel implements ActionListener, MouseListener{
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        i+=5;
+        //i+=5;
         
         if (secuencia ==5) {
             secuencia = 0;
@@ -126,5 +126,50 @@ public class NewPanel2 extends JPanel implements ActionListener, MouseListener{
     public void mouseExited(MouseEvent e) {
 
     }
-    
-}
+ 
+    private class TAdapter extends KeyAdapter {
+        @Override
+        public void keyReleased(KeyEvent e){
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_SPACE) {
+            for (int j = 4; j > 0; j--) {
+                    x+=10*j;
+                    i+=10*j;
+                    System.out.println("ciclo2");
+                    repaint();
+                    
+                }
+            }
+        }
+        @Override
+        public void keyPressed(KeyEvent e){
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_SPACE) {
+                int c =x;
+                for (int j = 0; j < 5; j++) {
+                    x-=10*j;
+                    i+=10*j;
+                    repaint();
+                  
+                }                
+                
+                //x =c;
+                System.out.println("Espacio");
+            }
+            if (key == KeyEvent.VK_LEFT) {
+                i-=500;
+            }
+            if (key == KeyEvent.VK_RIGHT) {
+                i+=5;
+            }
+            if (key == KeyEvent.VK_UP) {
+                x-=5;
+            }
+            if (key == KeyEvent.VK_DOWN) {
+                x+=5;
+            }
+        }
+        
+    }
+}    
+
