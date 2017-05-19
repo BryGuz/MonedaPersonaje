@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package character;
 
 import javax.swing.JPanel;
@@ -14,22 +10,23 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
-import juego.NewPanel2;
-/**
- *
- * @author Estudiante
- */
+import java.awt.Polygon;
+import java.awt.Shape;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class character extends JPanel implements ActionListener,MouseListener {
     private Timer timer;
-    
+    private int mx=500;
+    private int my=500;
     private int sec = 0;
     private int px =60;
     private int py =575;
-    int cs = 0;
-    int cs1 = 0;
-    int cs2 = 0;
-    int s =0;
-
+    private int cs = 0;
+    private int cs1 = 0;
+    private int cs2 = 0;
+    private int s =0;
+    private int MN =0;
     public character() {
         addKeyListener(new TAdapter());
         setFocusable(true);    
@@ -49,24 +46,39 @@ public class character extends JPanel implements ActionListener,MouseListener {
         Image p = loadImage("walking.png");
         Image c = loadImage("clouds.png");
         Image m = loadImage("coin.png");
-        //g.drawImage(fondo, 50, 50, null);
+        
+      
                 
         for (int i = 0; i < 100; i++) {
             g.drawImage(fondo, 0+(i*22), 0, null);
         }
         for (int i = 0; i < 100; i++) {
             g.drawImage(piso, 0+(i*112), 700, null);
+            
         }
-        int t = s*115;
-        int t2 = t+115;
+        int t = s*96;
+        int t2 = t+96;
+        Font fuente=new Font("TimesRoman", Font.BOLD, 30);
         
-        g.drawImage(p, px, py,(px) + 115,py +134,t,0,t2,134, null);
-        g.drawRect(px, py, 100, 134);
-        
+        g.setColor(Color.WHITE);
+         g.setFont(fuente);
+       g.drawString("MONEDAS: " + MN, 700, 50);
+        g.drawImage(p, px, py,(px) + 96,py +134,t,0,t2,134, null);
+      //  g.drawRect(px, py, 100, 134);
+     
         g.drawImage(c, 400-cs, 200, null);
         g.drawImage(c, 700-cs1, 300, null);
         g.drawImage(c, 1000-cs2, 100, null);
-        g.drawImage(m,500 ,500 , null);        
+        g.drawImage(m,mx ,my , null); 
+        g.setColor(Color.red);
+        g.fillRect(900, 610, 90, 90);
+        g.setColor(Color.WHITE);
+        g.drawString("META", 905, 670);
+     //   g.drawRect(mx, my, 55, 55);
+        
+        
+        
+           
     }
     
     public Image loadImage(String imageName){
@@ -78,8 +90,7 @@ public class character extends JPanel implements ActionListener,MouseListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        //i+=5;
-        //nubes
+        checkcolision();
         if (cs ==900) {
             cs = -500;
         }else{
@@ -97,46 +108,60 @@ public class character extends JPanel implements ActionListener,MouseListener {
         }
         
         
-        //person
-        /*
-        if (sec%4 ==0) {
-            if(s ==4){
-                s=0;
-            }else{
-                s++;
-            }
-            
-        }*/
+       
         
         
         repaint();
     }
-    
-    
+    public Rectangle getBounds(){
+        
+        return new Rectangle(px, py, 100, 134);
+    }
+    public Rectangle getBoundsobjeto(){
+        return new Rectangle(mx, my, 55, 55);
+    }
+     public Rectangle getBoundObjeto2(){
+       return new Rectangle(0,732,1000,68);
+     }
+    public Rectangle getBoundObjeto3(){
+        return new Rectangle(900, 610, 90, 90);
+    }
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Point mo = e.getPoint();
+        if (getBounds().contains(mo)) {
+            timer.stop();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(character.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            timer.start();
+        }
+        
+       
     }
+    
 
     @Override
     public void mousePressed(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
     
@@ -149,7 +174,7 @@ public class character extends JPanel implements ActionListener,MouseListener {
             for (int j = 4; j > 0; j--) {
                     py+=10*j;
                     px+=10*j;
-                    System.out.println("ciclo2");
+                    
                     repaint();
                     
                 }
@@ -167,21 +192,11 @@ public class character extends JPanel implements ActionListener,MouseListener {
                   
                 }                
                 
-                //x =c;
-                System.out.println("Espacio");
+          
             }
-            if (key == KeyEvent.VK_LEFT) {
-                px-=10;
-                if(s==0){
-                    s =3;
-                }else{
-                    s--;
-                }
-                
-                
-            }
+        
             if (key == KeyEvent.VK_RIGHT) {
-                px+=5;
+                px+=15;
                 if(s==3){
                     s =0;
                 }else{
@@ -190,6 +205,7 @@ public class character extends JPanel implements ActionListener,MouseListener {
             }
             if (key == KeyEvent.VK_UP) {
                 py-=5;
+                
             }
             if (key == KeyEvent.VK_DOWN) {
                 py+=5;
@@ -197,5 +213,31 @@ public class character extends JPanel implements ActionListener,MouseListener {
         }
         
     }
+    
+    public void checkcolision(){
+        
+        Rectangle Character = this.getBounds();
+        Rectangle coin = this.getBoundsobjeto();
+        Rectangle piso = this.getBoundObjeto2();
+        Rectangle meta = this.getBoundObjeto3();
+        
+        if(Character.intersects(coin)){
+            
+            mx = 60000;
+            my = 60000;
+            MN += 1;
+        }
+        if(Character.intersects(meta)){
+           py=10000;
+           px=10000;
+            
+         //  JOptionPane.showMessageDialog(null,"¡GANASTE!"); 
+         if(Character.intersects(piso)){
+             //AQUI NO SE COMO  va :C
+         }
+        }
+        
+    }
+   
     
 }
